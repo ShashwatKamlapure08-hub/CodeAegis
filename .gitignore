@@ -1,0 +1,16 @@
+# Ignore massive ML datasets
+data/
+
+# Ignore Python bytecode and cache
+__pycache__/
+*.pyc
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Windows system files
+Thumbs.db
+
+# Ignore virtual environments (optional but recommended)
+venv/
+.env   
