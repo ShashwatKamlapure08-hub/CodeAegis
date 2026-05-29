@@ -32,7 +32,9 @@ CodeAegis/
 │   └── app.py                  # Week 4: Streamlit multi-engine web user interface
 └── README.md                   # System configuration & overview documentation
 
-## Dashboard Preview
+## 🖥️ System Interface & Demonstration
 
-![CodeAegis Live Interface]
-<img width="1470" height="833" alt="CodeAegis" src="https://github.com/user-attachments/assets/0a5e9a0a-681e-4616-a6b8-96bff1650f12" />
+Below is a live preview of the CodeAegis Adversarial Evaluation suite processing code scripts side-by-side to detect engineered masking bypasses:
+
+### CodeAegis Dashboard Preview
+(src/CodeAegis.png)
