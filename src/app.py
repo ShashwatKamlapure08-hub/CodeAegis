@@ -33,9 +33,13 @@ def initialize_and_train_engines():
             "Ensure 'src/CVEFixes_python_only.csv' is generated and pushed to your repo."
         )
     
-    X_raw = df['code_text'].astype(str).values
-    y = df['is_vulnerable'].values
+    # Ensure the dataframe index is freshly contiguous before splitting
+    df = df.reset_index(drop=True)
     
+    # Cast to pure NumPy arrays explicitly avoiding Arrow metadata structures
+    X_raw = np.array(df['code_text'].astype(str).tolist(), dtype=object)
+    y = np.array(df['is_vulnerable'].tolist(), dtype=int)      
+
     X_train_raw, X_test_raw, y_train, y_test = train_test_split(
         X_raw, y, test_size=0.2, random_state=42, stratify=y
     )
