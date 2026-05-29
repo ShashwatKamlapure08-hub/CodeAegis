@@ -21,6 +21,8 @@ CodeAegis is an adversarial machine learning evaluation and defense framework de
 ---
 
 ## 📁 Repository Directory Structure
+
+```
 CodeAegis/
 ├── src/
 │   ├── CodeAegis.png           # Dashboard preview image
@@ -29,6 +31,7 @@ CodeAegis/
 │   └── app.py                  # Week 4: Streamlit multi-engine web user interface
 ├── .gitignore
 └── README.md                   # System configuration & overview documentation
+```
 
 ---
 
