@@ -31,3 +31,8 @@ CodeAegis/
 │   ├── patched_scanner.py      # Week 3: Defensive adversarial retraining module
 │   └── app.py                  # Week 4: Streamlit multi-engine web user interface
 └── README.md                   # System configuration & overview documentation
+
+## Dashboard Preview
+
+![CodeAegis Live Interface]
+<img width="1470" height="833" alt="CodeAegis" src="https://github.com/user-attachments/assets/0a5e9a0a-681e-4616-a6b8-96bff1650f12" />
