@@ -21,20 +21,21 @@ CodeAegis is an adversarial machine learning evaluation and defense framework de
 ---
 
 ## 📁 Repository Directory Structure
-
-```text
 CodeAegis/
-├── data/
-│   └── CVEFixes.csv            # Clean raw Python vulnerability dataset
 ├── src/
+│   ├── CodeAegis.png           # Dashboard preview image
 │   ├── perturbation_engine.py  # Week 2: Attack implementation & token camouflage
 │   ├── patched_scanner.py      # Week 3: Defensive adversarial retraining module
 │   └── app.py                  # Week 4: Streamlit multi-engine web user interface
+├── .gitignore
 └── README.md                   # System configuration & overview documentation
+
+---
 
 ## 🖥️ System Interface & Demonstration
 
 Below is a live preview of the CodeAegis Adversarial Evaluation suite processing code scripts side-by-side to detect engineered masking bypasses:
 
 ### CodeAegis Dashboard Preview
-(src/CodeAegis.png)
+
+![CodeAegis Dashboard](src/CodeAegis.png)
