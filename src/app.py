@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import re
 import random
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
@@ -13,26 +14,39 @@ st.set_page_config(page_title="CodeAegis Shield Dashboard", page_icon="🛡️",
 # --- Persistent ML Framework Initialization (Cached for Speed) ---
 @st.cache_resource
 def initialize_and_train_engines():
-    # Load dataset
-    df = pd.read_csv("data/CVEFixes.csv", low_memory=False)
-    df = df[df['language'].str.lower() == 'py']
-    df['is_vulnerable'] = df['safety'].apply(lambda x: 1 if str(x).lower() == 'vulnerable' else 0)
-    df = df.rename(columns={'code': 'code_text'}).dropna(subset=['code_text', 'is_vulnerable'])
+    # 1. Fallback / Dataset Routing Check
+    # Points directly to the lightweight pre-filtered slice for cloud deployment
+    optimized_path = "src/CVEFixes_python_only.csv"
+    legacy_path = "data/CVEFixes.csv"
     
-    X_raw = df['code_text'].values
+    if os.path.exists(optimized_path):
+        df = pd.read_csv(optimized_path)
+    elif os.path.exists(legacy_path):
+        # Fallback for local testing if the optimized file isn't built yet
+        df = pd.read_csv(legacy_path, low_memory=False)
+        df = df[df['language'].str.lower() == 'py']
+        df['is_vulnerable'] = df['safety'].apply(lambda x: 1 if str(x).lower() == 'vulnerable' else 0)
+        df = df.rename(columns={'code': 'code_text'}).dropna(subset=['code_text', 'is_vulnerable'])
+    else:
+        raise FileNotFoundError(
+            "Could not locate a valid training dataset slice. "
+            "Ensure 'src/CVEFixes_python_only.csv' is generated and pushed to your repo."
+        )
+    
+    X_raw = df['code_text'].astype(str).values
     y = df['is_vulnerable'].values
     
     X_train_raw, X_test_raw, y_train, y_test = train_test_split(
         X_raw, y, test_size=0.2, random_state=42, stratify=y
     )
     
-    # 1. Train Baseline Setup
+    # 2. Train Baseline Setup
     vec_baseline = TfidfVectorizer(analyzer='char', ngram_range=(3, 4), max_features=1500)
     X_train_base = vec_baseline.fit_transform(X_train_raw)
     model_baseline = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
     model_baseline.fit(X_train_base, y_train)
     
-    # 2. Train Patched Setup (With Data Augmentation)
+    # 3. Train Patched Setup (With Data Augmentation)
     def quick_perturb(text):
         distractors = ["# [CodeAegis Sanitization Check Passed]", "# Verified stable execution path"]
         lines = str(text).split('\n')
@@ -102,7 +116,7 @@ with scan_col1:
     prob_base = model_base.predict_proba(features_base)[0]
     
     st.metric(label="Predicted Safety Metric", value="🔴 Vulnerable" if pred_base == 1 else "🟢 Safe")
-    st.write(f"Confidence Confidence Level: **{prob_base[pred_base]*100:.2f}%**")
+    st.write(f"Confidence Level: **{prob_base[pred_base]*100:.2f}%**")
 
 with scan_col2:
     st.success("🛡️ Adversarially Patched Engine (Week 3)")
@@ -111,4 +125,4 @@ with scan_col2:
     prob_patch = model_patch.predict_proba(features_patch)[0]
     
     st.metric(label="Predicted Safety Metric", value="🔴 Vulnerable" if pred_patch == 1 else "🟢 Safe")
-    st.write(f"Confidence Confidence Level: **{prob_patch[pred_patch]*100:.2f}%**")
+    st.write(f"Confidence Level: **{prob_patch[pred_patch]*100:.2f}%**")
